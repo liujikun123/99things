@@ -1,4 +1,5 @@
-<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\99things\assets\css\APlayer.min.css"><script src="\99things\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
@@ -14,88 +15,87 @@
             box-sizing: border-box;
         }
 
-<pre><code class="hljs">    #mapContainer, #routeDetails, #pointsManager &#123;
-        border: 1px solid #ccc;
-    &#125;
+        #mapContainer, #routeDetails, #pointsManager {
+            border: 1px solid #ccc;
+        }
 
-    #mapContainer &#123;
-        width: 60%;
-        height: 100%;
-        flex: 1 1 auto;
-    &#125;
+        #mapContainer {
+            width: 60%;
+            height: 100%;
+            flex: 1 1 auto;
+        }
 
-    #routeDetails, #pointsManager &#123;
-        width: 20%;
-        height: 100%;
-        overflow-y: auto;
-        padding: 20px;
-        box-sizing: border-box;
-    &#125;
+        #routeDetails, #pointsManager {
+            width: 20%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    .input-group &#123;
-        padding: 10px;
-    &#125;
+        .input-group {
+            padding: 10px;
+        }
 
-    input[type=&quot;text&quot;], button &#123;
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    &#125;
-
-    button &#123;
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-    &#125;
-
-    button:hover &#123;
-        background-color: #45a049;
-    &#125;
-
-    @media (max-width: 768px) &#123;
-        #mapContainer, #routeDetails, #pointsManager &#123;
+        input[type="text"], button {
             width: 100%;
-            padding: 0;
-        &#125;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-        .flex-container &#123;
-            flex-direction: column;
-        &#125;
-    &#125;
-    .notification-container &#123;
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #4CAF50;
-        color: white;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        display: none; /* 初始不显示 */
-        z-index: 1000;
-        transition: all 0.5s ease;
-    &#125;
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
 
-    .notification-container.show &#123;
-        display: block;
-        animation: slideIn 0.5s ease forwards;
-    &#125;
+        button:hover {
+            background-color: #45a049;
+        }
 
-    @keyframes slideIn &#123;
-        0% &#123;
-            transform: translateX(-50%) translateY(20px);
-            opacity: 0;
-        &#125;
-        100% &#123;
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        &#125;
-    &#125;
-&lt;/style&gt;
-</code></pre>
+        @media (max-width: 768px) {
+            #mapContainer, #routeDetails, #pointsManager {
+                width: 100%;
+                padding: 0;
+            }
+
+            .flex-container {
+                flex-direction: column;
+            }
+        }
+        .notification-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none; /* 初始不显示 */
+            z-index: 1000;
+            transition: all 0.5s ease;
+        }
+
+        .notification-container.show {
+            display: block;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-50%) translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="notification" class="notification-container">
@@ -111,13 +111,12 @@
         </div>
     </div>
 
-<pre><code class="hljs">&lt;div class=&quot;input-group&quot;&gt;
-    &lt;input type=&quot;text&quot; id=&quot;cityInput&quot; placeholder=&quot;输入城市名&quot; /&gt;
-    &lt;button id=&quot;addStartBtn&quot;&gt;添加起点&lt;/button&gt;
-    &lt;button id=&quot;addDestinationBtn&quot;&gt;添加目的点&lt;/button&gt;
-    &lt;button id=&quot;solveTSPBtn&quot;&gt;解决TSP问题&lt;/button&gt;
-&lt;/div&gt;
-</code></pre>
+    <div class="input-group">
+        <input type="text" id="cityInput" placeholder="输入城市名" />
+        <button id="addStartBtn">添加起点</button>
+        <button id="addDestinationBtn">添加目的点</button>
+        <button id="solveTSPBtn">解决TSP问题</button>
+    </div>
 </body>
 <script>
     var map;
@@ -130,279 +129,280 @@
     var geocoder = new BMap.Geocoder(); // 初始化地理编码服务
     var allLabels = [];
 
-<pre><code class="hljs"> function initMap() &#123;
-    map = new BMap.Map(&quot;mapContainer&quot;);
-    var point = new BMap.Point(116.404, 39.915); // 以北京为中心
-    map.centerAndZoom(point, 5);
-    map.enableScrollWheelZoom(true);
+     function initMap() {
+        map = new BMap.Map("mapContainer");
+        var point = new BMap.Point(116.404, 39.915); // 以北京为中心
+        map.centerAndZoom(point, 5);
+        map.enableScrollWheelZoom(true);
 
-    // 点击地图添加点
-    map.addEventListener(&quot;click&quot;, function(e)&#123;
-        addDestination(e.point);
-    &#125;);
+        // 点击地图添加点
+        map.addEventListener("click", function(e){
+            addDestination(e.point);
+        });
 
 
-    // 解决TSP问题按钮
-    document.getElementById(&#39;solveTSPBtn&#39;).addEventListener(&#39;click&#39;, function() &#123;
-        solveTSP();
-    &#125;);
-&#125;
+        // 解决TSP问题按钮
+        document.getElementById('solveTSPBtn').addEventListener('click', function() {
+            solveTSP();
+        });
+    }
 
-function addStartPoint(point) &#123;
-    getCityName(point, function(cityName) &#123;
-        startPoint = &#123; point: point, cityName: cityName &#125;;
-        var marker = new BMap.Marker(point);
-        map.addOverlay(marker);
-        markers.push(marker);
-        updatePointsList(); // 更新点管理列表
-    &#125;);
-&#125;
+    function addStartPoint(point) {
+        getCityName(point, function(cityName) {
+            startPoint = { point: point, cityName: cityName };
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+            markers.push(marker);
+            updatePointsList(); // 更新点管理列表
+        });
+    }
 
-// 添加目的点的函数
-function addDestination(point) &#123;
-    getCityName(point, function(cityName) &#123;
-        destinations.push(&#123; point: point, cityName: cityName &#125;);
-        var marker = new BMap.Marker(point);
-        map.addOverlay(marker);
-        markers.push(marker);
-        updatePointsList(); // 更新点管理列表
-    &#125;);
-&#125;
+    // 添加目的点的函数
+    function addDestination(point) {
+        getCityName(point, function(cityName) {
+            destinations.push({ point: point, cityName: cityName });
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+            markers.push(marker);
+            updatePointsList(); // 更新点管理列表
+        });
+    }
 
-// 删除起点或目的点的函数
-function removePoint(index, isStart) &#123;
-    if (isStart) &#123;
-        map.removeOverlay(markers[0]); // 删除起点标记
-        markers.splice(0, 1);
-        startPoint = null;
-    &#125; else &#123;
-        var destIndex = index - (startPoint ? 1 : 0);
-        map.removeOverlay(markers[destIndex + 1]);
-        markers.splice(destIndex + 1, 1);
-        destinations.splice(destIndex, 1);
-    &#125;
-    updatePointsList();
-    // solveTSP(); // 重新计算路径
-&#125;
+    // 删除起点或目的点的函数
+    function removePoint(index, isStart) {
+        if (isStart) {
+            map.removeOverlay(markers[0]); // 删除起点标记
+            markers.splice(0, 1);
+            startPoint = null;
+        } else {
+            var destIndex = index - (startPoint ? 1 : 0);
+            map.removeOverlay(markers[destIndex + 1]);
+            markers.splice(destIndex + 1, 1);
+            destinations.splice(destIndex, 1);
+        }
+        updatePointsList();
+        // solveTSP(); // 重新计算路径
+    }
 
-// 更新点管理列表
-function updatePointsList() &#123;
-    var list = document.getElementById(&#39;pointsList&#39;);
-    list.innerHTML = &#39;&#39;;
-    if (startPoint) &#123;
-        var li = document.createElement(&#39;li&#39;);
-        li.textContent = &quot;起点: &quot; + startPoint.cityName;
-        var removeBtn = document.createElement(&#39;button&#39;);
-        removeBtn.textContent = &#39;删除&#39;;
-        removeBtn.onclick = function() &#123;
-            removePoint(0, true);
-        &#125;;
-        li.appendChild(removeBtn);
-        list.appendChild(li);
-    &#125;
-    destinations.forEach(function(destination, index) &#123;
-        var li = document.createElement(&#39;li&#39;);
-        li.textContent = &quot;目的点 &quot; + (index + 1) + &quot;: &quot; + destination.cityName;
-        var removeBtn = document.createElement(&#39;button&#39;);
-        removeBtn.textContent = &#39;删除&#39;;
-        removeBtn.onclick = function() &#123;
-            removePoint(index, false);
-        &#125;;
-        li.appendChild(removeBtn);
-        list.appendChild(li);
-    &#125;);
-&#125;
+    // 更新点管理列表
+    function updatePointsList() {
+        var list = document.getElementById('pointsList');
+        list.innerHTML = '';
+        if (startPoint) {
+            var li = document.createElement('li');
+            li.textContent = "起点: " + startPoint.cityName;
+            var removeBtn = document.createElement('button');
+            removeBtn.textContent = '删除';
+            removeBtn.onclick = function() {
+                removePoint(0, true);
+            };
+            li.appendChild(removeBtn);
+            list.appendChild(li);
+        }
+        destinations.forEach(function(destination, index) {
+            var li = document.createElement('li');
+            li.textContent = "目的点 " + (index + 1) + ": " + destination.cityName;
+            var removeBtn = document.createElement('button');
+            removeBtn.textContent = '删除';
+            removeBtn.onclick = function() {
+                removePoint(index, false);
+            };
+            li.appendChild(removeBtn);
+            list.appendChild(li);
+        });
+    }
 
-// 按钮事件监听器
-document.getElementById(&#39;addStartBtn&#39;).addEventListener(&#39;click&#39;, function() &#123;
-    var city = document.getElementById(&#39;cityInput&#39;).value;
-    getPointAndAdd(city, addStartPoint);
-&#125;);
+    // 按钮事件监听器
+    document.getElementById('addStartBtn').addEventListener('click', function() {
+        var city = document.getElementById('cityInput').value;
+        getPointAndAdd(city, addStartPoint);
+    });
 
-document.getElementById(&#39;addDestinationBtn&#39;).addEventListener(&#39;click&#39;, function() &#123;
-    var city = document.getElementById(&#39;cityInput&#39;).value;
-    getPointAndAdd(city, addDestination);
-&#125;);
+    document.getElementById('addDestinationBtn').addEventListener('click', function() {
+        var city = document.getElementById('cityInput').value;
+        getPointAndAdd(city, addDestination);
+    });
 
-// 获取地点并添加逻辑
-function getPointAndAdd(city, addFunction) &#123;
-    var myGeo = new BMap.Geocoder();
-    myGeo.getPoint(city, function(point)&#123;
-        if (point) &#123;
-            addFunction(point);
-        &#125; else &#123;
-            showNotification(&quot;未找到该地点，请重新输入！&quot;);
-        &#125;
-    &#125;, &quot;中国&quot;);
-&#125;
+    // 获取地点并添加逻辑
+    function getPointAndAdd(city, addFunction) {
+        var myGeo = new BMap.Geocoder();
+        myGeo.getPoint(city, function(point){
+            if (point) {
+                addFunction(point);
+            } else {
+                showNotification("未找到该地点，请重新输入！");
+            }
+        }, "中国");
+    }
 
-// 解决TSP问题
-function solveTSP() &#123;
-if (!startPoint) &#123;
-    showNotification(&quot;请先设置起点！&quot;);
-    return;
-&#125;
-if (destinations.length &lt; 1) &#123;
-    showNotification(&quot;请添加至少一个目的点！&quot;);
-    return;
-&#125;
-shortestPath = [];
-shortestDistance = Infinity;
-permute(destinations.slice(), 0); // 使用目的点的副本，以保持原数组不变
-showNotification(&quot;最短路径长度: &quot; + shortestDistance + &quot;米&quot;);
-drawPath(shortestPath);
-updateRouteDetails(shortestPath);
-</code></pre>
-<p>}<br>    &#x2F;&#x2F; 全局变量来存储所有标签，以便可以轻松地移除它们</p>
-<pre><code class="hljs">// 绘制路径并在每段上标注序号
-function drawPath(path) &#123;
-    // 清除旧的路径和标签
-    if (polyline) &#123;
-        map.removeOverlay(polyline); // 移除旧的路径
-    &#125;
-    allLabels.forEach(function(label) &#123;
-        map.removeOverlay(label); // 移除所有旧标签
-    &#125;);
-    allLabels = []; // 清空标签数组
+    // 解决TSP问题
+    function solveTSP() {
+    if (!startPoint) {
+        showNotification("请先设置起点！");
+        return;
+    }
+    if (destinations.length < 1) {
+        showNotification("请添加至少一个目的点！");
+        return;
+    }
+    shortestPath = [];
+    shortestDistance = Infinity;
+    permute(destinations.slice(), 0); // 使用目的点的副本，以保持原数组不变
+    showNotification("最短路径长度: " + shortestDistance + "米");
+    drawPath(shortestPath);
+    updateRouteDetails(shortestPath);
+}
+    // 全局变量来存储所有标签，以便可以轻松地移除它们
 
-    var points = path.map(function(point) &#123;
-        return new BMap.Point(point.lng, point.lat);
-    &#125;);
-    polyline = new BMap.Polyline(points, &#123;strokeColor: &quot;blue&quot;, strokeWeight: 6, strokeOpacity: 0.5&#125;);
-    map.addOverlay(polyline);
+    // 绘制路径并在每段上标注序号
+    function drawPath(path) {
+        // 清除旧的路径和标签
+        if (polyline) {
+            map.removeOverlay(polyline); // 移除旧的路径
+        }
+        allLabels.forEach(function(label) {
+            map.removeOverlay(label); // 移除所有旧标签
+        });
+        allLabels = []; // 清空标签数组
 
-    // 添加序号标签到每段路径
-    for (let i = 0; i &lt; points.length - 1; i++) &#123;
-        let midpoint = getMidpoint(points[i], points[i + 1]);
-        let label = addLabel(midpoint, i + 1);
-        allLabels.push(label); // 存储新创建的标签以便后续可以移除
-    &#125;
+        var points = path.map(function(point) {
+            return new BMap.Point(point.lng, point.lat);
+        });
+        polyline = new BMap.Polyline(points, {strokeColor: "blue", strokeWeight: 6, strokeOpacity: 0.5});
+        map.addOverlay(polyline);
 
-    map.setViewport(points); // 调整视图以适应路径
-&#125;
+        // 添加序号标签到每段路径
+        for (let i = 0; i < points.length - 1; i++) {
+            let midpoint = getMidpoint(points[i], points[i + 1]);
+            let label = addLabel(midpoint, i + 1);
+            allLabels.push(label); // 存储新创建的标签以便后续可以移除
+        }
 
-// 在地图上添加标签并返回标签对象
-function addLabel(position, text) &#123;
-    var label = new BMap.Label(text, &#123;
-        position: position,
-        offset: new BMap.Size(-10, -10) // 调整标签位置
-    &#125;);
-    label.setStyle(&#123;
-        color: &#39;white&#39;,
-        backgroundColor: &#39;red&#39;,
-        border: &#39;none&#39;,
-        borderRadius: &#39;5px&#39;,
-        padding: &#39;5px&#39;
-    &#125;);
-    map.addOverlay(label);
-    return label;
-&#125;
+        map.setViewport(points); // 调整视图以适应路径
+    }
 
-// 计算两点的中点
-function getMidpoint(p1, p2) &#123;
-    return new BMap.Point((p1.lng + p2.lng) / 2, (p1.lat + p2.lat) / 2);
-&#125;
-// 更新路线详情
-function updateRouteDetails(path) &#123;
-    console.log(path);
-    var detailsPromises = []; // 用于存储所有获取城市名称的Promise
-    for (let i = 0; i &lt; path.length - 1; i++) &#123;
-        let segmentPromise = new Promise((resolve) =&gt; &#123;
-            getCityName(path[i], function(cityName1) &#123;
-                getCityName(path[i + 1], function(cityName2) &#123;
-                    resolve(&quot;第 &quot; + (i + 1) + &quot; 站: &quot; + cityName1 + &quot; - &quot; + cityName2);
-                &#125;);
-            &#125;);
-        &#125;);
-        detailsPromises.push(segmentPromise);
-    &#125;
+    // 在地图上添加标签并返回标签对象
+    function addLabel(position, text) {
+        var label = new BMap.Label(text, {
+            position: position,
+            offset: new BMap.Size(-10, -10) // 调整标签位置
+        });
+        label.setStyle({
+            color: 'white',
+            backgroundColor: 'red',
+            border: 'none',
+            borderRadius: '5px',
+            padding: '5px'
+        });
+        map.addOverlay(label);
+        return label;
+    }
 
-    // 当所有的城市名称都被获取后，更新路线详情显示
-    Promise.all(detailsPromises).then((details) =&gt; &#123;
-        document.getElementById(&#39;routeDetails&#39;).innerHTML = details.join(&quot;&lt;br&gt;&quot;);
-    &#125;);
-&#125;
+    // 计算两点的中点
+    function getMidpoint(p1, p2) {
+        return new BMap.Point((p1.lng + p2.lng) / 2, (p1.lat + p2.lat) / 2);
+    }
+    // 更新路线详情
+    function updateRouteDetails(path) {
+        console.log(path);
+        var detailsPromises = []; // 用于存储所有获取城市名称的Promise
+        for (let i = 0; i < path.length - 1; i++) {
+            let segmentPromise = new Promise((resolve) => {
+                getCityName(path[i], function(cityName1) {
+                    getCityName(path[i + 1], function(cityName2) {
+                        resolve("第 " + (i + 1) + " 站: " + cityName1 + " - " + cityName2);
+                    });
+                });
+            });
+            detailsPromises.push(segmentPromise);
+        }
 
-// 获取城市名称（逆地理编码）
-function getCityName(point, callback) &#123;
-    geocoder.getLocation(point, function(result)&#123;
-        if (result &amp;&amp; result.addressComponents) &#123;
-            callback(result.addressComponents.city);
-        &#125; else &#123;
-            callback(&quot;未知地点&quot;);
-        &#125;
-    &#125;);
-&#125;
+        // 当所有的城市名称都被获取后，更新路线详情显示
+        Promise.all(detailsPromises).then((details) => {
+            document.getElementById('routeDetails').innerHTML = details.join("<br>");
+        });
+    }
 
-// 生成所有排列的函数，并计算距离，确保从起点开始，最后返回起点
-function permute(destinations, startIndex) &#123;
-    if (startIndex == destinations.length) &#123;
-        var path = [startPoint.point].concat(destinations.map(dest =&gt; dest.point)).concat([startPoint.point]);
-        var totalDistance = calculateTotalDistance(path);
-        if (totalDistance &lt; shortestDistance) &#123;
-            shortestDistance = totalDistance;
-            shortestPath = path;
-        &#125;
-    &#125; else &#123;
-        for (var i = startIndex; i &lt; destinations.length; i++) &#123;
-            [destinations[startIndex], destinations[i]] = [destinations[i], destinations[startIndex]]; // 交换
-            permute(destinations, startIndex + 1);
-            [destinations[startIndex], destinations[i]] = [destinations[i], destinations[startIndex]]; // 复原
-        &#125;
-    &#125;
-&#125;
+    // 获取城市名称（逆地理编码）
+    function getCityName(point, callback) {
+        geocoder.getLocation(point, function(result){
+            if (result && result.addressComponents) {
+                callback(result.addressComponents.city);
+            } else {
+                callback("未知地点");
+            }
+        });
+    }
 
-// 计算整个个路径的总距离
-function calculateTotalDistance(path) &#123;
-    var totalDistance = 0;
-    for (var i = 0; i &lt; path.length - 1; i++) &#123;
-        totalDistance += calculateDistance(path[i], path[i + 1]);
-    &#125;
-    return totalDistance;
-&#125;
-// 缓存对象
-var distanceCache = &#123;&#125;;
+    // 生成所有排列的函数，并计算距离，确保从起点开始，最后返回起点
+    function permute(destinations, startIndex) {
+        if (startIndex == destinations.length) {
+            var path = [startPoint.point].concat(destinations.map(dest => dest.point)).concat([startPoint.point]);
+            var totalDistance = calculateTotalDistance(path);
+            if (totalDistance < shortestDistance) {
+                shortestDistance = totalDistance;
+                shortestPath = path;
+            }
+        } else {
+            for (var i = startIndex; i < destinations.length; i++) {
+                [destinations[startIndex], destinations[i]] = [destinations[i], destinations[startIndex]]; // 交换
+                permute(destinations, startIndex + 1);
+                [destinations[startIndex], destinations[i]] = [destinations[i], destinations[startIndex]]; // 复原
+            }
+        }
+    }
 
-// 计算两点之间的距离，并使用缓存来存储已计算的距离
-function calculateDistance(p1, p2) &#123;
-    // 生成一个唯一的键，该键表示点对
-    // 确保键的一致性，无论点的顺序如何
-    var key = createSortedKey(p1, p2);
+    // 计算整个个路径的总距离
+    function calculateTotalDistance(path) {
+        var totalDistance = 0;
+        for (var i = 0; i < path.length - 1; i++) {
+            totalDistance += calculateDistance(path[i], path[i + 1]);
+        }
+        return totalDistance;
+    }
+    // 缓存对象
+    var distanceCache = {};
 
-    // 检查缓存中是否已有这个距离计算
-    if (distanceCache[key]) &#123;
-        return distanceCache[key];
-    &#125;
+    // 计算两点之间的距离，并使用缓存来存储已计算的距离
+    function calculateDistance(p1, p2) {
+        // 生成一个唯一的键，该键表示点对
+        // 确保键的一致性，无论点的顺序如何
+        var key = createSortedKey(p1, p2);
 
-    // 如果缓存中没有，计算距离并存储在缓存中
-    var distance = map.getDistance(new BMap.Point(p1.lng, p1.lat), new BMap.Point(p2.lng, p2.lat));
-    distanceCache[key] = distance;
-    return distance;
-&#125;
+        // 检查缓存中是否已有这个距离计算
+        if (distanceCache[key]) {
+            return distanceCache[key];
+        }
 
-// 创建一个基于两点坐标的排序后的键
-function createSortedKey(p1, p2) &#123;
-    // 将点按纬度然后经度排序
-    var sortedPoints = [p1, p2].sort((a, b) =&gt; &#123;
-        return a.lat === b.lat ? a.lng - b.lng : a.lat - b.lat;
-    &#125;);
-    // 生成并返回键
-    return `$&#123;sortedPoints[0].lat&#125;,$&#123;sortedPoints[0].lng&#125;-$&#123;sortedPoints[1].lat&#125;,$&#123;sortedPoints[1].lng&#125;`;
-&#125;
+        // 如果缓存中没有，计算距离并存储在缓存中
+        var distance = map.getDistance(new BMap.Point(p1.lng, p1.lat), new BMap.Point(p2.lng, p2.lat));
+        distanceCache[key] = distance;
+        return distance;
+    }
 
-function showNotification(message) &#123;
-var notification = document.getElementById(&#39;notification&#39;);
-var notificationText = document.getElementById(&#39;notificationText&#39;);
-notificationText.textContent = message;
-notification.classList.add(&#39;show&#39;);
+    // 创建一个基于两点坐标的排序后的键
+    function createSortedKey(p1, p2) {
+        // 将点按纬度然后经度排序
+        var sortedPoints = [p1, p2].sort((a, b) => {
+            return a.lat === b.lat ? a.lng - b.lng : a.lat - b.lat;
+        });
+        // 生成并返回键
+        return `${sortedPoints[0].lat},${sortedPoints[0].lng}-${sortedPoints[1].lat},${sortedPoints[1].lng}`;
+    }
 
-// 自动隐藏提示框
-setTimeout(function() &#123;
-    notification.classList.remove(&#39;show&#39;);
-&#125;, 3000); // 3秒后自动隐藏
-</code></pre>
-<p>}</p>
-<pre><code class="hljs">window.onload = initMap;
-</code></pre>
-<p></script></p>
+    function showNotification(message) {
+    var notification = document.getElementById('notification');
+    var notificationText = document.getElementById('notificationText');
+    notificationText.textContent = message;
+    notification.classList.add('show');
+
+    // 自动隐藏提示框
+    setTimeout(function() {
+        notification.classList.remove('show');
+    }, 3000); // 3秒后自动隐藏
+}
+
+    window.onload = initMap;
+</script>
+
 </html>
